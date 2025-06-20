@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>60's Tournament Theatre Show</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #ffe66d, #ff6b6b);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s ease infinite;
+            text-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+        }
+        
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tab.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-color: #fff;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.5);
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .song-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .song-card:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .song-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8787);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.4);
+        }
+        
+        .song-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .artist {
+            color: #4ecdc4;
+            font-style: italic;
+        }
+        
+        .lauren-solo {
+            background: linear-gradient(45deg, #ff6b6b, #ff4757);
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .costume-change {
+            background: rgba(78, 205, 196, 0.2);
+            border: 2px solid #4ecdc4;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .costume-change::before {
+            content: "👔";
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+        }
+        
+        .vote-moment {
+            background: linear-gradient(45deg, #ffe66d, #ffd93d);
+            color: #1a1a2e;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(255, 230, 109, 0.5);
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 5px 20px rgba(255, 230, 109, 0.5); }
+            50% { box-shadow: 0 5px 30px rgba(255, 230, 109, 0.8); }
+        }
+        
+        .tournament-bracket {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .bracket-round {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .vs {
+            display: inline-block;
+            margin: 0 20px;
+            font-size: 1.5em;
+            color: #ff6b6b;
+            font-weight: bold;
+            animation: flash 1s infinite;
+        }
+        
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #4ecdc4, #44a3aa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            color: #ccc;
+            margin-top: 5px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            margin-right: 20px;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .options {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        
+        .option {
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            background: rgba(78, 205, 196, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .intermission {
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.5);
+        }
+        
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 15px 25px;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            display: block;
+            color: white;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
+        }
+        
+        .filter-info {
+            text-align: center;
+            margin: 10px 0;
+            color: #4ecdc4;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎸 60's Tournament Theatre Show 🎸</h1>
+            <p style="font-size: 1.2em; margin-top: 10px; color: #4ecdc4;">Interactive Performance Guide</p>
+        </div>
+        
+        <input type="text" class="search-box" placeholder="🔍 Search songs, artists, or costume changes..." id="searchBox">
+        <div class="filter-info" id="filterInfo"></div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="showSection('overview')">📊 Overview</div>
+            <div class="tab" onclick="showSection('part1')">🎤 Part One</div>
+            <div class="tab" onclick="showSection('part2')">🎭 Part Two</div>
+            <div class="tab" onclick="showSection('finals')">🏆 Finals</div>
+            <div class="tab" onclick="showSection('party')">🎉 Party Set</div>
+            <div class="tab" onclick="showSection('timeline')">⏱️ Timeline</div>
+        </div>
+        
+        <div id="overview" class="section active">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">32</div>
+                    <div class="stat-label">Total Songs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">11</div>
+                    <div class="stat-label">Lauren Solo Spots</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Voting Rounds</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Costume Changes</div>
+                </div>
+            </div>
+            
+            <div class="tournament-bracket">
+                <h2 style="margin-bottom: 20px;">🏆 Tournament Structure</h2>
+                <div class="bracket-round">
+                    <h3>Initial Rounds</h3>
+                    <p>Beatles <span class="vs">VS</span> Kinks <span class="vs">VS</span> Monkees <span class="vs">VS</span> Small Faces <span class="vs">VS</span> Stones <span class="vs">VS</span> Beach Boys <span class="vs">VS</span> The Who</p>
+                </div>
+                <div class="bracket-round">
+                    <h3>Semi-Finals</h3>
+                    <p>Round 1: Beatles vs Kinks/Monkees</p>
+                    <p>Round 2: Stones/Small Faces vs Who/Beach Boys</p>
+                </div>
+                <div class="bracket-round">
+                    <h3>Grand Final</h3>
+                    <p>Winner of Semi 1 <span class="vs">VS</span> Winner of Semi 2</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="part1" class="section">
+            <h2 style="text-align: center; margin-bottom: 30px;">🎤 Part One</h2>
+            
+            <div class="costume-change">
+                <strong>Opening Look:</strong> Cowboy hats, shades, Black suits, waistcoat & Black tie, white shirts<br>
+                <strong>Instruments:</strong> White bass, white strat, Les Paul
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">1</span>
+                <span class="song-title">Boots Are Made for Walking</span>
+                <span class="artist">Band with Lauren</span>
+                <div style="margin-top: 10px; color: #ffe66d;">
+                    📢 Lauren explains show format & voting process (2 min)
+                </div>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">2</span>
+                <span class="song-title">Sweets for My Sweet</span>
+                <span class="artist">The Searchers</span>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">3</span>
+                <span class="song-title">Your My World</span>
+                <span class="artist">Cilla Black</span>
+                <span class="lauren-solo">LAUREN SOLO</span>
+            </div>
+            
+            <div class="costume-change">
+                <strong>Beatles Look:</strong> Beatles Wigs & hollow body guitars
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">4</span>
+                <span class="song-title">She Loves You</span>
+                <span class="artist">The Beatles</span>
+            </div>
+            
+            <div class="vote-moment">
+                ⚡ VOTE #1 - Beatles must win! ⚡
+            </div>
+            
+            <div class="costume-change">
+                <strong>Kinks Look:</strong><br>
+                • Drummer & Matt: Keep black jacket & Les Paul<br>
+                • Neil: Navy velvet jacket/white bass<br>
+                • Jamie: Brown velvet & Sheraton
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">5</span>
+                <span class="song-title">You Really Got Me</span>
+                <span class="artist">The Kinks</span>
+                <div style="margin-top: 5px; color: #ccc; font-size: 0.9em;">Lauren BV off stage</div>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">6</span>
+                <span class="song-title">Crazy</span>
+                <span class="artist">Patsy Cline</span>
+                <span class="lauren-solo">LAUREN SOLO</span>
+            </div>
+            
+            <div class="costume-change">
+                <strong>Monkees Look:</strong><br>
+                • Beatles wigs, ALL blue velvet marching jackets<br>
+                • Matt: Bobble hat, sheraton<br>
+                • Jamie: No guitar & tambourine
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">7</span>
+                <span class="song-title">Daydream Believer</span>
+                <span class="artist">Monkees</span>
+            </div>
+            
+            <div class="vote-moment">
+                ⚡ VOTE #2 (need 2 minutes) ⚡
+            </div>
+            
+            <div class="costume-change">
+                <strong>Small Faces Look:</strong><br>
+                • Matt & drummer: Button up shirts/black jackets<br>
+                • Neil: Grey jacket<br>
+                • Jamie: Light jacket & small rimmed shades
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">8</span>
+                <span class="song-title">Lazy Sunday</span>
+                <span class="artist">Small Faces</span>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">9</span>
+                <span class="song-title">You Don't Have to Say You Love Me</span>
+                <span class="lauren-solo">LAUREN SOLO</span>
+            </div>
+            
+            <div class="costume-change">
+                <strong>Stones Look:</strong><br>
+                • Drummer: Tie & black jacket<br>
+                • Neil: Long wig, shirt/waistcoat<br>
+                • Matt: Blonde wig, black striped blazer<br>
+                • Jamie: Long brown wig, white frilly shirt, white skirt, white trousers
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">10</span>
+                <span class="song-title">Satisfaction</span>
+                <span class="artist">Rolling Stones</span>
+            </div>
+            
+            <div class="vote-moment">
+                ⚡ VOTE #3 ⚡
+            </div>
+            
+            <div class="costume-change">
+                <strong>Beach Boys Look:</strong><br>
+                • ALL: White trousers, white/blue striped shirts<br>
+                • Jamie: White strat, Matt: Sheraton, Neil: White bass
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">11</span>
+                <span class="song-title">Downtown</span>
+                <span class="lauren-solo">LAUREN SOLO</span>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">12</span>
+                <span class="song-title">Barbara Ann</span>
+                <span class="artist">Beach Boys</span>
+                <div style="margin-top: 5px; color: #ccc; font-size: 0.9em;">Lauren BV off stage</div>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">13</span>
+                <span class="song-title">You Don't Own Me</span>
+                <span class="lauren-solo">LAUREN SOLO</span>
+            </div>
+            
+            <div class="costume-change">
+                <strong>The Who Look:</strong><br>
+                • Matt: Union Jack/plain long sleeve t<br>
+                • Jamie: Black/white shirt<br>
+                • Drummer & bassist: Long sleeve Target/arrow T shirt
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">14</span>
+                <span class="song-title">My Generation</span>
+                <span class="artist">The Who</span>
+                <div style="margin-top: 5px; color: #ffe66d;">⚠️ Run in sound check</div>
+            </div>
+            
+            <div class="vote-moment">
+                ⚡ VOTE #4 ⚡
+            </div>
+            
+            <div class="intermission">
+                <h2>☕ INTERMISSION</h2>
+                <p>Video (53 minutes in dress rehearsal)</p>
+            </div>
+        </div>
+        
+        <div id="part2" class="section">
+            <h2 style="text-align: center; margin-bottom: 30px;">🎭 Part Two</h2>
+            
+            <div class="costume-change">
+                <strong>Opening Part 2:</strong> White trousers, black jackets, mustaches & wigs<br>
+                <em>Note: Jamie not on first song</em>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">15</span>
+                <span class="song-title">Son of a Preacher Man</span>
+            </div>
+            
+            <div class="costume-change">
+                <strong>Sgt Pepper's Look:</strong> Sgt Pepper's jackets<br>
+                <em>Lauren talks during change</em>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">16</span>
+                <span class="song-title">Sgt Pepper's / Little Help from My Friends</span>
+                <span class="artist">Beatles</span>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">17</span>
+                <span class="song-title">Be My Baby</span>
+                <span class="lauren-solo">LAUREN SOLO</span>
+            </div>
+            
+            <div class="song-card" style="background: rgba(78, 205, 196, 0.1);">
+                <span class="song-number">18</span>
+                <span class="song-title">SEMI-FINAL 1A</span>
+                <div class="options">
+                    <div class="option">🎸 Waterloo Sunset - The Kinks</div>
+                    <div class="option">🎸 I'm a Believer - Monkees</div>
+                </div>
+            </div>
+            
+            <div class="vote-moment">
+                ⚡ SEMI-FINAL VOTE 1: Beatles vs Kinks/Monkees ⚡
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">19</span>
+                <span class="song-title">Will You Still Love Me</span>
+                <span class="lauren-solo">LAUREN SOLO</span>
+                <div style="margin-top: 10px; color: #ffe66d;">
+                    📢 Introduces next semi-final
+                </div>
+            </div>
+            
+            <div class="song-card" style="background: rgba(78, 205, 196, 0.1);">
+                <span class="song-number">20</span>
+                <span class="song-title">SEMI-FINAL 2A</span>
+                <div class="options">
+                    <div class="option">🎸 Ruby Tuesday - Stones</div>
+                    <div class="option">🎸 Itchycoo Park - Small Faces</div>
+                </div>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">21</span>
+                <span class="song-title">Heard It Through the Grapevine</span>
+                <span class="lauren-solo">LAUREN SOLO</span>
+            </div>
+            
+            <div class="song-card" style="background: rgba(78, 205, 196, 0.1);">
+                <span class="song-number">22</span>
+                <span class="song-title">SEMI-FINAL 2B</span>
+                <div class="options">
+                    <div class="option">🎸 Pinball Wizard - The Who</div>
+                    <div class="option">🎸 Surfin USA - Beach Boys</div>
+                </div>
+            </div>
+            
+            <div class="vote-moment">
+                ⚡ SEMI-FINAL VOTE 2 ⚡
+            </div>
+        </div>
+        
+        <div id="finals" class="section">
+            <h2 style="text-align: center; margin-bottom: 30px;">🏆 The Finals</h2>
+            
+            <div class="tournament-bracket">
+                <h3>GRAND FINAL MATCHUP</h3>
+                <p style="font-size: 1.2em;">Winner of Semi 1 <span class="vs">VS</span> Winner of Semi 2</p>
+            </div>
+            
+            <div class="song-card" style="background: rgba(255, 107, 107, 0.1);">
+                <span class="song-number">23</span>
+                <span class="song-title">FINALS - SONG A</span>
+                <div class="costume-change" style="margin: 10px 0;">
+                    <strong>Beatles option:</strong> Beige military jackets
+                </div>
+                <div class="options">
+                    <div class="option">🎸 Hey Jude - Beatles</div>
+                    <div class="option">🎸 I Can See for Miles / Can't Explain - The Who</div>
+                    <div class="option">🎸 God Only Knows - Beach Boys</div>
+                </div>
+            </div>
+          
+                 <div class="song-card">
+                <span class="song-number">23.5</span>
+                <span class="song-title">UNKNOWN SONG</span>
+                <span class="artist">UNKNOWN</span>
+                <span class="lauren-solo">LAUREN SOLO</span>
+            </div>
+            
+            <div class="song-card" style="background: rgba(255, 107, 107, 0.1);">
+                <span class="song-number">24</span>
+                <span class="song-title">FINALS - SONG B</span>
+                <div class="options">
+                    <div class="option">🎸 All Day and All of the Night - Kinks</div>
+                    <div class="option">🎸 Jumping Jack Flash - Stones</div>
+                    <div class="option">🎸 All or Nothing - Small Faces</div>
+                    <div class="option">🎸 Daydream Believer (repeat) - Monkees</div>
+                </div>
+            </div>
+            
+            <div class="vote-moment" style="background: linear-gradient(45deg, #ffd700, #ffed4e);">
+                ⚡⚡ FINAL VOTE - CROWN THE CHAMPION! ⚡⚡
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">25</span>
+                <span class="song-title">Shout</span>
+                <span class="artist">Lulu</span>
+                <span class="lauren-solo">LAUREN SOLO</span>
+            </div>
+            
+            <div class="song-card" style="background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 237, 78, 0.1));">
+                <span class="song-number">26</span>
+                <span class="song-title">🏆 WINNER'S SONG 🏆</span>
+                <div class="options">
+                    <div class="option">🎸 Twist & Shout - Beatles</div>
+                    <div class="option">🎸 Sunny Afternoon - The Kinks</div>
+                    <div class="option">🎸 Let's Spend the Night Together - Rolling Stones</div>
+                    <div class="option">🎸 Sloop John B - Beach Boys</div>
+                    <div class="option">🎸 I Can't Explain - The Who</div>
+                    <div class="option">🎸 Sha La La Lee - Small Faces</div>
+                    <div class="option">🎸 I'm Not Your Stepping Stone - Monkees</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="party" class="section">
+            <h2 style="text-align: center; margin-bottom: 30px;">🎉 60's Party Set</h2>
+            
+            <div class="song-card">
+                <span class="song-number">27</span>
+                <span class="song-title">Wipeout / Pretty Woman / Glad All Over</span>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">28</span>
+                <span class="song-title">Hi Ho Silver Lining</span>
+                <div style="margin-top: 5px; color: #ccc;">
+                    • Skip verse 2<br>
+                    • Neil sings, Jamie solo in crowd
+                </div>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">29</span>
+                <span class="song-title">Suspicious Minds</span>
+                <div style="margin-top: 5px; color: #ccc;">• Skip verse 2</div>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">30</span>
+                <span class="song-title">Sweet Caroline</span>
+                <div style="margin-top: 10px; color: #ffe66d;">
+                    🎤 Lauren joins the band
+                </div>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">31</span>
+                <span class="song-title">I Want You Back</span>
+                <div style="margin-top: 5px; color: #ccc;">• Short/fast version</div>
+            </div>
+            
+            <div class="song-card">
+                <span class="song-number">32</span>
+                <span class="song-title">Do You Wanna Dance Medley</span>
+                <div style="margin-top: 10px; padding-left: 20px; color: #4ecdc4;">
+                    • Do You Love Me<br>
+                    • 1000 Dances<br>
+                    • Do the Twist<br>
+                    • Twist Again
+                </div>
+            </div>
+            
+            <div class="song-card" style="background: linear-gradient(45deg, rgba(108, 92, 231, 0.2), rgba(162, 155, 254, 0.2));">
+                <div style="text-align: center; font-size: 1.3em;">
+                    🎬 OUTRO VIDEO → 🙏 BOW → 🤝 MEET & GREET
+                </div>
+            </div>
+        </div>
+        
+        <div id="timeline" class="section">
+            <h2 style="text-align: center; margin-bottom: 30px;">⏱️ Show Timeline</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Pre-Show</h3>
+                        <p>Intro video with band in opening costumes</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background: #ff6b6b;"></div>
+                    <div class="timeline-content">
+                        <h3>Part One (Songs 1-14)</h3>
+                        <p>• 4 voting rounds<br>
+                        • 5 Lauren solos<br>
+                        • 5 costume changes<br>
+                        • Estimated time: ~45 minutes</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background: #6c5ce7;"></div>
+                    <div class="timeline-content">
+                        <h3>Intermission</h3>
+                        <p>Video presentation (53 minutes in dress rehearsal)</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background: #4ecdc4;"></div>
+                    <div class="timeline-content">
+                        <h3>Part Two (Songs 15-22)</h3>
+                        <p>• Semi-finals setup<br>
+                        • 3 Lauren solos<br>
+                        • 2 costume changes<br>
+                        • 2 semi-final votes<br>
+                        • Estimated time: ~30 minutes</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background: #ffd700;"></div>
+                    <div class="timeline-content">
+                        <h3>Finals (Songs 23-26)</h3>
+                        <p>• Grand final showdown<br>
+                        • 1 Lauren solo<br>
+                        • Final vote<br>
+                        • Winner's celebration<br>
+                        • Estimated time: ~15 minutes</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background: #ffe66d;"></div>
+                    <div class="timeline-content">
+                        <h3>Party Set (Songs 27-32)</h3>
+                        <p>• Audience participation<br>
+                        • Lauren joins band<br>
+                        • High energy finish<br>
+                        • Estimated time: ~20 minutes</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background: #a29bfe;"></div>
+                    <div class="timeline-content">
+                        <h3>Finale</h3>
+                        <p>Outro video, bow, and meet & greet</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card" style="margin-top: 30px; text-align: center;">
+                <div class="stat-number">~2.5 hrs</div>
+                <div class="stat-label">Total Show Time (including intermission)</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Clear search when changing tabs
+            document.getElementById('searchBox').value = '';
+            document.getElementById('filterInfo').textContent = '';
+        }
+        
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const allCards = document.querySelectorAll('.song-card, .costume-change');
+            let matchCount = 0;
+            
+            if (searchTerm === '') {
+                allCards.forEach(card => {
+                    card.style.display = 'block';
+                    card.style.opacity = '1';
+                });
+                document.getElementById('filterInfo').textContent = '';
+                return;
+            }
+            
+            allCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.style.opacity = '1';
+                    matchCount++;
+                } else {
+                    card.style.display = 'block';
+                    card.style.opacity = '0.2';
+                }
+            });
+            
+            document.getElementById('filterInfo').textContent = 
+                matchCount > 0 ? `Found ${matchCount} matches` : 'No matches found';
+        });
+        
+        // Add hover effects to options
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Toggle selection
+                this.style.background = this.style.background === 'rgba(78, 205, 196, 0.4)' ? 
+                    'rgba(255, 255, 255, 0.05)' : 'rgba(78, 205, 196, 0.4)';
+            });
+        });
+        
+        // Animated background stars
+        function createStar() {
+            const star = document.createElement('div');
+            star.style.position = 'fixed';
+            star.style.width = '2px';
+            star.style.height = '2px';
+            star.style.background = 'white';
+            star.style.borderRadius = '50%';
+            star.style.opacity = Math.random();
+            star.style.left = Math.random() * window.innerWidth + 'px';
+            star.style.top = Math.random() * window.innerHeight + 'px';
+            star.style.pointerEvents = 'none';
+            star.style.animation = `twinkle ${3 + Math.random() * 3}s infinite`;
+            document.body.appendChild(star);
+            
+            setTimeout(() => star.remove(), 6000);
+        }
+        
+        // Create CSS animation for twinkling
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes twinkle {
+                0%, 100% { opacity: 0; }
+                50% { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Create stars periodically
+        setInterval(createStar, 300);
+    </script>
+</body>
+</html>
